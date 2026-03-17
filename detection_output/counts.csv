@@ -1,0 +1,5 @@
+timestamp,type,frame_prev,frame_curr,Total entries,Entered,Exit2026-03-17 01:12:37,EXIT,frame_000086.jpg,frame_000088.jpg,0,0,12026-03-17 05:57:11,EXIT,frame_000086.jpg,frame_000088.jpg,0,0,1
+2026-03-17 05:58:02,ENTRY,frame_000136.jpg,frame_000138.jpg,1,1,1
+2026-03-17 06:01:10,EXIT,frame_000320.jpg,frame_000322.jpg,0,1,2
+2026-03-17 06:09:18,EXIT,frame_000086.jpg,frame_000088.jpg,0,1,3
+2026-03-17 06:13:17,EXIT,frame_000320.jpg,frame_000322.jpg,0,1,4

@@ -1,0 +1,14 @@
+# P_check - Person detection and entry/exit counting
+# Python 3.10+ recommended
+
+# Core (step1_just_yolo.py, step2_detection.py, step2.0_detection.py)
+numpy>=1.24.0,<3.0
+opencv-python>=4.8.0
+
+# ONNX inference: use onnxruntime-gpu for CUDA (step2.0 is GPU-only)
+onnxruntime-gpu>=1.16.0
+# For CPU-only machines, install instead: onnxruntime>=1.16.0
+# (person_detect_recognize.py uses CPU fallback when CUDA is not available)
+
+# Face detection + embedding for person_differ.py (RetinaFace + ArcFace)
+insightface>=0.7.0
