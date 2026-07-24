@@ -1,0 +1,25 @@
+//-------------------------------------------------------------Same_Person_detecton------------------------------------------------------------------
+1-Height 
+2-Skin color
+3-Clothing.(Shirt,pant,shoe)
+4-male/female.
+5-Walking motion(If possible)[path]
+6-Face Detection(Register his face embedings,at least 10 or according to the code)
+
+
+Using all this make the person history, if it is the perisience customer or not.
+
+
+
+https://github.com/FoundationVision/ByteTrack 
+
+v1 video(mp4)->framess->logic(exit/entry)
+
+
+Dockerize server: Job 
+
+
+                  1- /submit submit job route(url+roi) auto download the mp4 from the url
+                  2- /status job id return (queue,state: queued, prcoessing, done, error)  
+                  3- /result (Job id)result global result + job related.
+
