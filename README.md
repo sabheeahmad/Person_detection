@@ -8,6 +8,35 @@ Each detected person receives a tracking ID so the system can follow their movem
 
 For every confirmed crossing, the project saves an annotated image and adds a row to a CSV file. These results make it easy to review individual detections and see the total number of entries, exits, and people currently inside.
 
+## Detection and Tracking Logic
+
+### 1. Detect the Person
+
+The configured region of interest is cropped from each frame and passed to the YOLOv8 ONNX model. Only detections classified as a person and above the confidence threshold are kept. Non-Maximum Suppression (NMS) then removes duplicate, overlapping boxes around the same person.
+
+### 2. Track the Same Person
+
+For each bounding box, the project calculates a centroid near the person's feet. It then calculates the Euclidean distance between every centroid in the previous frame and every centroid in the current frame.
+
+Possible matches must be within the configured distance threshold, currently 80 pixels. They are sorted from the shortest distance to the longest, and the closest one-to-one matches are selected first. A matched detection keeps the same person ID; an unmatched detection receives a new ID.
+
+This method is called **greedy nearest-centroid matching**. It is similar to a nearest-neighbor search, but it is **not the K-nearest-neighbors (KNN) classification algorithm**. KNN uses several labeled training examples and votes on a class. This project simply matches each person to the closest available detection in the next frame.
+
+If YOLO misses someone briefly, the re-identification step searches recent frames for a nearby old centroid and reuses that person's ID. With the current settings, it checks the last 5 frames and accepts a re-identification within 100 pixels.
+
+### 3. Decide ENTRY or EXIT
+
+The person's feet centroid is checked against two virtual lines using a 2D cross-product test. A small finite-state machine remembers which line the person crossed first:
+
+| Movement | Result |
+|----------|--------|
+| Outside → Line B → Line A → Inside | `ENTRY` |
+| Inside → Line A → Line B → Outside | `EXIT` |
+
+The new side of each line must be observed for 3 consecutive frame pairs before it is accepted. This hysteresis reduces false counts caused by detection jitter or a person standing close to a line.
+
+After the complete crossing order is confirmed, the event is written to `counts.csv`, an annotated image is saved, and the current occupancy is updated.
+
 ## Sample Detection
 
 ![P_check entry detection sample](detection_output/incident_5f138750-97cd-4f1a-be62-6c77d7930504_20260305-015638_2_4_trimmed_crossing_ENTRY_frame_000012_frame_000014.jpg)
